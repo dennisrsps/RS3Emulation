@@ -1,19 +1,3 @@
-/*
- * This file is part of Ieldor.
- *
- * Ieldor is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Ieldor is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Ieldor.  If not, see <http://www.gnu.org/licenses/>.
- */
 package com.rs3e;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -39,15 +23,6 @@ import org.openrs.cache.RS3Cache;
 import com.rs3e.network.ChannelChildHandler;
 import com.rs3e.ondemand.UpdateService;
 
-/**
- * This is the main entry point for the Ieldor server application, here we are
- * going to start whatever needs to be initialized on server startup; this will
- * include things like cache loading, networking, and more (note: somethings may
- * be used for game content, such as item definitions).
- * 
- * @author Thomas Le Godais <thomaslegodais@live.com>
- * 
- */
 public class Main {
 
 	/**
