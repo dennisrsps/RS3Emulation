@@ -14,22 +14,44 @@
  * You should have received a copy of the GNU General Public License
  * along with RS3Emulation.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rs3e.utility;
+package com.rs3e.network.protocol.ondemand;
 
-import java.nio.charset.Charset;
+import io.netty.buffer.ByteBuf;
 
 /**
  * 
  * RS3Emulation
- * Charsets.java
+ * FileResponse.java
  * Mar 11, 2014
  * @author Im Frizzy : Kyle Friz : <skype:kfriz1998>
  */
-public final class Charsets {
+public final class FileResponse {
 
-	public static final Charset ASCII_LATIN1_CHARSET = Charset.forName("ISO-8859-1");
+	private final boolean priority;
+	private final int type, file;
+	private final ByteBuf container;
 
-	private Charsets() {
-		/* empty */
+	public FileResponse(boolean priority, int type, int file, ByteBuf container) {
+		this.priority = priority;
+		this.type = type;
+		this.file = file;
+		this.container = container;
 	}
+
+	public boolean isPriority() {
+		return priority;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public int getFile() {
+		return file;
+	}
+
+	public ByteBuf getContainer() {
+		return container;
+	}
+
 }

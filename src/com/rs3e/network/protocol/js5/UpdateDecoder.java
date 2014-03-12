@@ -18,7 +18,7 @@ package com.rs3e.network.protocol.js5;
 
 import com.rs3e.network.protocol.messages.UpdateEncryptionMessage;
 import com.rs3e.network.protocol.messages.UpdateVersionMessage;
-import com.rs3e.ondemand.FileRequest;
+import com.rs3e.network.protocol.ondemand.FileRequest;
 import com.rs3e.utility.ByteBufUtils;
 
 import io.netty.buffer.ByteBuf;

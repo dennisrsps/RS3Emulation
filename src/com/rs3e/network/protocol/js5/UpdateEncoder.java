@@ -16,7 +16,7 @@
  */
 package com.rs3e.network.protocol.js5;
 
-import com.rs3e.ondemand.FileResponse;
+import com.rs3e.network.protocol.ondemand.FileResponse;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

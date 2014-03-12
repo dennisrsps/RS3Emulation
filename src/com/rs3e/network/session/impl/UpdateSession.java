@@ -1,18 +1,18 @@
 /*
- * This file is part of Ieldor.
+ * This file is part of RS3Emulation.
  *
- * Ieldor is free software: you can redistribute it and/or modify
+ * RS3Emulation is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Ieldor is distributed in the hope that it will be useful,
+ * RS3Emulation is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Ieldor.  If not, see <http://www.gnu.org/licenses/>.
+ * along with RS3Emulation.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.rs3e.network.session.impl;
 
@@ -29,24 +29,25 @@ import java.util.Deque;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openrs.cache.RS3Cache;
 
 import com.rs3e.Constants;
 import com.rs3e.Main;
+import com.rs3e.cache.RS3Cache;
 import com.rs3e.network.protocol.js5.XorEncoder;
 import com.rs3e.network.protocol.messages.UpdateEncryptionMessage;
 import com.rs3e.network.protocol.messages.UpdateStatusMessage;
 import com.rs3e.network.protocol.messages.UpdateVersionMessage;
+import com.rs3e.network.protocol.ondemand.FileRequest;
+import com.rs3e.network.protocol.ondemand.FileResponse;
+import com.rs3e.network.protocol.ondemand.UpdateService;
 import com.rs3e.network.session.Session;
-import com.rs3e.ondemand.FileRequest;
-import com.rs3e.ondemand.FileResponse;
-import com.rs3e.ondemand.UpdateService;
 
 /**
- * An {@link Session} that is used to handle the handshake update procedure.
  * 
- * @author Thomas Le Godais <thomaslegodais@live.com>
- * 
+ * RS3Emulation
+ * UpdateSession.java
+ * Mar 11, 2014
+ * @author Im Frizzy : Kyle Friz : <skype:kfriz1998>
  */
 public class UpdateSession extends Session {
 
