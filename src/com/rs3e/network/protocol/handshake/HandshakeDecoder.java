@@ -68,7 +68,7 @@ public class HandshakeDecoder extends ChannelInboundByteHandlerAdapter {
 			ctx.pipeline().addFirst(new WorldListEncoder(), new WorldListDecoder());
 			break;
 		case HANDSHAKE_LOGIN:
-			ctx.pipeline().addFirst(new LoginEncoder(), new LoginDecoder(), new LoginMessageEncoder());
+			ctx.pipeline().addFirst(new LoginEncoder(), new LoginDecoder());
 			ctx.write(new LoginResponse(0));
 			break;
 		default:
