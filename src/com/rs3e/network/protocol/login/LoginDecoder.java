@@ -11,7 +11,9 @@ import java.security.SecureRandom;
 
 import com.rs3e.Constants;
 import com.rs3e.network.protocol.messages.LoginResponse;
+import com.rs3e.network.protocol.messages.LoginResponse;
 import com.rs3e.utility.ByteBufUtils;
+
 
 /**
  * @author Belthazar - 731 Updates
@@ -22,12 +24,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 	/**
 	 * An enumeration used for storing the possible states of login.
 	 */
-	public enum LoginState { DECODE_HEADER, CONNECTION_TYPE, CLIENT_DETAILS, LOBBY_PAYLOAD, GAME_PAYLOAD };
-	
-	/**
-	 * An enumeration used for storing the possible login types.
-	 */
-	public enum LoginTypes { LOBBY, GAME }
+	public enum LoginState { DECODE_HEADER, CONNECTION_TYPE, CLIENT_DETAILS, PAYLOAD };
 	
 	/**
 	 * The default login state.
@@ -35,7 +32,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 	private LoginState state = LoginState.CONNECTION_TYPE;
 	
 	private int loginSize;
-	private LoginTypes currentLoginType;
+	private LoginType currentLoginType;
 	
 	/*
 	 * (non-Javadoc)
@@ -52,9 +49,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 				//return decodePayload(ctx, buf);
 			case CLIENT_DETAILS:
 				return decodeClientDetails(buf);
-			case GAME_PAYLOAD:
-				break;
-			case LOBBY_PAYLOAD:
+			case PAYLOAD:
 				decodeLobbyPayload(ctx, buf);
 				break;
 		}
@@ -99,8 +94,11 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 		return null;
 	}*/
 	
-	private Object decodeLobbyPayload(ChannelHandlerContext context, ByteBuf buffer) throws ProtocolException {
-		int secureBufferSize = buffer.readShort() & 0xFFFF;
+	private Object decodePayload(ChannelHandlerContext context, ByteBuf buffer) {
+		byte[] payload = new byte[buffer.readableBytes()];
+		buffer.readBytes(payload);
+		return new LoginPayload(currentLoginType, payload);
+		/*int secureBufferSize = buffer.readShort() & 0xFFFF;
 		if (buffer.readableBytes() < secureBufferSize) {
 			throw new ProtocolException("Invalid secure buffer size.");
 		}
@@ -135,7 +133,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 		byte[] xteaBlock = new byte[buffer.readableBytes()];
 		buffer.readBytes(xteaBlock);
 		
-		return new LoginLobbyPayload(password, xteaKey, xteaBlock);		
+		return new LoginLobbyPayload(password, xteaKey, xteaBlock);*/		
 	}
 	
 	private Object decodeClientDetails(ByteBuf buffer) throws ProtocolException {
@@ -151,12 +149,15 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 			//throw new ProtocolException("Invalid client version/sub-version.");
 		}
 
-		if (currentLoginType.equals(LoginTypes.GAME)) {
+		/*if (currentLoginType.equals(LoginTypes.GAME)) {
 			buffer.readByte();
-		}
-
-		state = currentLoginType.equals(LoginTypes.LOBBY) ? LoginState.LOBBY_PAYLOAD : LoginState.GAME_PAYLOAD;
-		return null;
+		}*/
+		
+		byte[] payload = new byte[loginSize-8];
+		buffer.readBytes(payload);
+		return new LoginPayload(currentLoginType, payload);
+		//state = currentLoginType.equals(LoginTypes.LOBBY) ? LoginState.LOBBY_PAYLOAD : LoginState.GAME_PAYLOAD;
+		//return null;
 	}
 	
 	private Object decodeConnectionType(ByteBuf buffer) throws ProtocolException {
@@ -165,7 +166,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 			throw new ProtocolException("Invalid login opcode: " + loginType);
 		}
 
-		currentLoginType = loginType == 19 ? LoginTypes.LOBBY : LoginTypes.GAME;
+		currentLoginType = loginType == 19 ? LoginType.LOBBY : LoginType.GAME;
 		loginSize = buffer.readShort() & 0xFFFF;
 
 		state = LoginState.CLIENT_DETAILS;
