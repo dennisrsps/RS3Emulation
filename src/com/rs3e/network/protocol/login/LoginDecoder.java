@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.net.ProtocolException;
 import java.security.SecureRandom;
 
+import com.rs3e.Constants;
 import com.rs3e.network.protocol.messages.LoginMessage;
 import com.rs3e.utility.ByteBufUtils;
 
@@ -107,7 +108,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 		byte[] secureBytes = new byte[secureBufferSize];
 		buffer.readBytes(secureBytes);
 
-		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.LOGIN_EXPONENT, Constants.LOGIN_MODULUS).toByteArray());
+		ByteBuf secureBuffer = Unpooled.wrappedBuffer(new BigInteger(secureBytes).modPow(Constants.JS5PrivateKey, Constants.JS5ModulusKey).toByteArray());
 		int blockOpcode = secureBuffer.readUnsignedByte();
 
 		if (blockOpcode != 10) {
@@ -145,7 +146,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 		int version = buffer.readInt();
 		int subVersion = buffer.readInt();
 
-		if (version != 795 && subVersion != 1) {
+		if (version != Constants.ServerRevision && subVersion != Constants.ServerSubRevision) {
 			return new LoginMessage(6);
 			//throw new ProtocolException("Invalid client version/sub-version.");
 		}
