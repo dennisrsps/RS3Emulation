@@ -2,6 +2,7 @@ package com.rs3e.network.session.impl;
 
 import io.netty.channel.ChannelHandlerContext;
 
+import com.rs3e.network.protocol.messages.LoginMessage;
 import com.rs3e.network.session.Session;
 import com.rsps.Constants;
 import com.rsps.game.player.Player;

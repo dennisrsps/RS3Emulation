@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import org.openrs.cache.RS3Cache;
 
+import com.rs3e.Constants;
 import com.rs3e.Main;
 import com.rs3e.network.protocol.js5.XorEncoder;
 import com.rs3e.network.protocol.messages.UpdateEncryptionMessage;
@@ -136,8 +137,7 @@ public class UpdateSession extends Session {
 			UpdateVersionMessage version = (UpdateVersionMessage) obj;
 
 			int status;
-			if (version.getVersion() == mainContext.getServerContext()
-					.getVersion()) {
+			if (version.getVersion() == Constants.ServerRevision) {
 				status = UpdateStatusMessage.STATUS_OK;
 			} else {
 				status = UpdateStatusMessage.STATUS_OUT_OF_DATE;
