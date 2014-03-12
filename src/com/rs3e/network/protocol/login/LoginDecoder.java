@@ -11,7 +11,7 @@ import java.security.SecureRandom;
 
 import com.rs3e.Constants;
 import com.rs3e.network.protocol.messages.LoginResponse;
-import com.rs3e.network.protocol.messages.LoginResponse;
+import com.rs3e.network.protocol.login.LoginResponse.LoginType;
 import com.rs3e.utility.ByteBufUtils;
 
 
@@ -94,11 +94,8 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 		return null;
 	}*/
 	
-	private Object decodePayload(ChannelHandlerContext context, ByteBuf buffer) {
-		byte[] payload = new byte[buffer.readableBytes()];
-		buffer.readBytes(payload);
-		return new LoginPayload(currentLoginType, payload);
-		/*int secureBufferSize = buffer.readShort() & 0xFFFF;
+	private Object decodePayload(ChannelHandlerContext context, ByteBuf buffer) throws ProtocolException {
+		int secureBufferSize = buffer.readShort() & 0xFFFF;
 		if (buffer.readableBytes() < secureBufferSize) {
 			throw new ProtocolException("Invalid secure buffer size.");
 		}
@@ -133,7 +130,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 		byte[] xteaBlock = new byte[buffer.readableBytes()];
 		buffer.readBytes(xteaBlock);
 		
-		return new LoginLobbyPayload(password, xteaKey, xteaBlock);*/		
+		return new LoginLobbyPayload(password, xteaKey, xteaBlock);	
 	}
 	
 	private Object decodeClientDetails(ByteBuf buffer) throws ProtocolException {
