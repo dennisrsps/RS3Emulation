@@ -12,6 +12,6 @@ Credits
 1. Sir Tom
 2. Graham
 3. Sean
-4. Kyle Fritz
+4. Kyle Friz : Im Frizzy
 5. Belthazar
 6. Sundays211
