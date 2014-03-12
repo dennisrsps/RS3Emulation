@@ -24,7 +24,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 	/**
 	 * An enumeration used for storing the possible states of login.
 	 */
-	public enum LoginState { DECODE_HEADER, CONNECTION_TYPE, CLIENT_DETAILS, PAYLOAD };
+	public enum LoginState { DECODE_HEADER, CONNECTION_TYPE, CLIENT_DETAILS, LOBBY_PAYLOAD, GAME_PAYLOAD };
 	
 	/**
 	 * The default login state.
