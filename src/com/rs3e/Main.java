@@ -25,6 +25,7 @@ import com.rs3e.ondemand.UpdateService;
 
 public class Main {
 
+	//Frizzys test commit
 	/**
 	 * The {@link ServerBootstrap} that is used to handle game networking.
 	 */
