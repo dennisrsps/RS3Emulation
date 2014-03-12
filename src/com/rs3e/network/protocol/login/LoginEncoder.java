@@ -24,7 +24,7 @@ public class LoginEncoder extends MessageToByteEncoder<LoginResponse> {
 	 */
 	@Override
 	public void encode(ChannelHandlerContext ctx, LoginResponse msg, ByteBuf out) throws Exception {
-		out.writeByte(msg.getReturnType().returnCode);
+		out.writeByte(msg.getReturnCode());
 		if (msg.hasPayload()) {
 			out.writeByte(msg.getPayloadSize());
 			out.writeBytes(msg.getPayload());
