@@ -26,9 +26,8 @@ import com.rs3e.network.protocol.js5.UpdateStatusEncoder;
 import com.rs3e.network.protocol.js5.XorEncoder;
 import com.rs3e.network.protocol.login.LoginDecoder;
 import com.rs3e.network.protocol.login.LoginEncoder;
-import com.rs3e.network.protocol.login.LoginMessageEncoder;
 import com.rs3e.network.protocol.messages.HandshakeMessage;
-import com.rs3e.network.protocol.messages.LoginMessage;
+import com.rs3e.network.protocol.messages.LoginResponse;
 import com.rs3e.network.protocol.worldlist.WorldListDecoder;
 import com.rs3e.network.protocol.worldlist.WorldListEncoder;
 
@@ -70,7 +69,7 @@ public class HandshakeDecoder extends ChannelInboundByteHandlerAdapter {
 			break;
 		case HANDSHAKE_LOGIN:
 			ctx.pipeline().addFirst(new LoginEncoder(), new LoginDecoder(), new LoginMessageEncoder());
-			ctx.write(new LoginMessage(0));
+			ctx.write(new LoginResponse(0));
 			break;
 		default:
 			break;
