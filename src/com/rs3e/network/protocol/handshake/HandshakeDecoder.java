@@ -24,7 +24,11 @@ import com.rs3e.network.protocol.js5.UpdateDecoder;
 import com.rs3e.network.protocol.js5.UpdateEncoder;
 import com.rs3e.network.protocol.js5.UpdateStatusEncoder;
 import com.rs3e.network.protocol.js5.XorEncoder;
+import com.rs3e.network.protocol.login.LoginDecoder;
+import com.rs3e.network.protocol.login.LoginEncoder;
+import com.rs3e.network.protocol.login.LoginMessageEncoder;
 import com.rs3e.network.protocol.messages.HandshakeMessage;
+import com.rs3e.network.protocol.messages.LoginMessage;
 import com.rs3e.network.protocol.worldlist.WorldListDecoder;
 import com.rs3e.network.protocol.worldlist.WorldListEncoder;
 
@@ -59,31 +63,25 @@ public class HandshakeDecoder extends ChannelInboundByteHandlerAdapter {
 		}
 		switch (handshakeState) {
 		case HANDSHAKE_UPDATE:
-			ctx.pipeline().addFirst(new UpdateEncoder(),
-					new UpdateStatusEncoder(), new XorEncoder(),
-					new UpdateDecoder());
+			ctx.pipeline().addFirst(new UpdateEncoder(), new UpdateStatusEncoder(), new XorEncoder(), new UpdateDecoder());
 			break;
 		case HANDSHAKE_WORLD_LIST:
-			ctx.pipeline().addFirst(new WorldListEncoder(),
-					new WorldListDecoder());
+			ctx.pipeline().addFirst(new WorldListEncoder(), new WorldListDecoder());
 			break;
 		case HANDSHAKE_LOGIN:
-			// ctx.pipeline().addFirst(new LoginEncoder(), new LoginDecoder(),
-			// new LoginMessageEncoder());
-			// ctx.write(new LoginMessage(0));
+			ctx.pipeline().addFirst(new LoginEncoder(), new LoginDecoder(), new LoginMessageEncoder());
+			ctx.write(new LoginMessage(0));
 			break;
 		default:
 			break;
 		}
 
-		ctx.nextInboundMessageBuffer()
-				.add(new HandshakeMessage(handshakeState));
+		ctx.nextInboundMessageBuffer().add(new HandshakeMessage(handshakeState));
 		ctx.fireInboundBufferUpdated();
 
 		if (in.readable()) {
 			ChannelHandlerContext head = ctx.pipeline().firstContext();
-			head.nextInboundByteBuffer().writeBytes(
-					in.readBytes(in.readableBytes()));
+			head.nextInboundByteBuffer().writeBytes(in.readBytes(in.readableBytes()));
 			head.fireInboundBufferUpdated();
 		}
 	}
