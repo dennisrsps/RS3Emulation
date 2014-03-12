@@ -14,46 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with RS3Emulation.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rs3e.network.session.impl;
-
-import io.netty.channel.ChannelHandlerContext;
-
-import com.rs3e.network.session.Session;
-import com.rsps.game.player.Player;
-import com.rsps.io.Packet;
-import com.rsps.io.PacketReader;
-import com.rsps.net.codec.world.GamePacketHandler;
+package com.rs3e.network.protocol.ondemand;
 
 /**
  * 
  * RS3Emulation
- * GameSession.java
+ * FileRequest.java
  * Mar 11, 2014
  * @author Im Frizzy : Kyle Friz : <skype:kfriz1998>
  */
-public class GameSession extends Session {
-	
-	private Player player;
+public final class FileRequest {
 
-	public GameSession(ChannelHandlerContext context) {
-		super(context);
+	private final boolean priority;
+	private final int type, file;
+
+	public FileRequest(boolean priority, int type, int file) {
+		this.priority = priority;
+		this.type = type;
+		this.file = file;
 	}
 
-	@Override
-	public void disconnected() {
-		// TODO Auto-generated method stub
-
+	public boolean isPriority() {
+		return priority;
 	}
 
-	@Override
-	public void message(Object obj) {
-		if (obj instanceof Packet) {
-			PacketReader reader = new PacketReader((Packet) obj);
-			GamePacketHandler.processPacket(player, reader);
-		}
+	public int getType() {
+		return type;
 	}
 
-	public void setPlayer (Player p) {
-		this.player = p;
+	public int getFile() {
+		return file;
 	}
+
 }

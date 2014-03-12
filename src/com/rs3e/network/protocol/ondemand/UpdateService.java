@@ -14,46 +14,48 @@
  * You should have received a copy of the GNU General Public License
  * along with RS3Emulation.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rs3e.network.session.impl;
+package com.rs3e.network.protocol.ondemand;
 
-import io.netty.channel.ChannelHandlerContext;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
-import com.rs3e.network.session.Session;
-import com.rsps.game.player.Player;
-import com.rsps.io.Packet;
-import com.rsps.io.PacketReader;
-import com.rsps.net.codec.world.GamePacketHandler;
+import com.rs3e.network.session.impl.UpdateSession;
 
 /**
  * 
  * RS3Emulation
- * GameSession.java
+ * UpdateService.java
  * Mar 11, 2014
  * @author Im Frizzy : Kyle Friz : <skype:kfriz1998>
  */
-public class GameSession extends Session {
-	
-	private Player player;
+public final class UpdateService implements Runnable {
 
-	public GameSession(ChannelHandlerContext context) {
-		super(context);
-	}
+	private final Queue<UpdateSession> pendingSessions = new ArrayDeque<>(); 
 
-	@Override
-	public void disconnected() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void message(Object obj) {
-		if (obj instanceof Packet) {
-			PacketReader reader = new PacketReader((Packet) obj);
-			GamePacketHandler.processPacket(player, reader);
+	public void addPendingSession(UpdateSession session) {
+		synchronized (pendingSessions) {
+			pendingSessions.add(session);
+			pendingSessions.notifyAll();
 		}
 	}
 
-	public void setPlayer (Player p) {
-		this.player = p;
+	@Override
+	public void run() {
+		for (;;) {
+			UpdateSession session;
+
+			synchronized (pendingSessions) {
+				while ((session = pendingSessions.poll()) == null) {
+					try {
+						pendingSessions.wait();
+					} catch (InterruptedException e) {
+						/* ignore */
+					}
+				}
+			}
+
+			session.processFileQueue();
+		}
 	}
+
 }
