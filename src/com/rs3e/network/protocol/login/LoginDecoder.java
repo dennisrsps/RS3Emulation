@@ -10,7 +10,7 @@ import java.net.ProtocolException;
 import java.security.SecureRandom;
 
 import com.rs3e.Constants;
-import com.rs3e.network.protocol.messages.LoginMessage;
+import com.rs3e.network.protocol.messages.LoginResponse;
 import com.rs3e.utility.ByteBufUtils;
 
 /**
@@ -147,7 +147,7 @@ public class LoginDecoder extends ByteToMessageDecoder<Object> {
 		int subVersion = buffer.readInt();
 
 		if (version != Constants.ServerRevision && subVersion != Constants.ServerSubRevision) {
-			return new LoginMessage(6);
+			return new LoginResponse(LoginResponse.GAME_UPDATED);
 			//throw new ProtocolException("Invalid client version/sub-version.");
 		}
 
