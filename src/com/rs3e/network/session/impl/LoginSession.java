@@ -20,7 +20,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import com.rs3e.network.protocol.messages.LoginMessage;
 import com.rs3e.network.session.Session;
-import com.rsps.Constants;
+import com.rs3e.Constants;
 import com.rsps.game.player.Player;
 import com.rsps.util.Base37Utils;
 import com.rsps.util.GeneralUtils;
@@ -114,7 +114,7 @@ public class LoginSession extends Session {
 
 			String serverToken = xteaBuffer.readString();
 			if (!serverToken.equals(Constants.SERVER_TOKEN)) {
-				channel.write(new LoginMessage(LoginMessage.BAD_SESSION));
+				channel.write(new LoginResponse(LoginResponse.BAD_SESSION));
 				return;
 			}
 			
@@ -122,7 +122,7 @@ public class LoginSession extends Session {
 
 			if (GeneralUtils.invalidAccountName(username)) {
 				//session.getLoginPackets().sendClientPacket(3);//Invalid username or password
-				channel.write(new LoginMessage(LoginMessage.INVALID_UN_PWD));
+				channel.write(new LoginResponse(LoginResponse.INVALID_UN_PWD));
 				return;
 			}
 			/*
@@ -145,7 +145,7 @@ public class LoginSession extends Session {
 				player = SerializableFilesManager.loadPlayer(username);
 				if (player == null) {
 					//session.getLoginPackets().sendClientPacket(20);//Invalid login server
-					channel.write(new LoginMessage(LoginMessage.INVALID_LOGIN_SERVER));
+					channel.write(new LoginResponse(LoginResponse.INVALID_LOGIN_SERVER));
 					return;
 				}
 				/*if (!SerializableFilesManager.createBackup(username)) {
@@ -154,13 +154,13 @@ public class LoginSession extends Session {
 				}*/
 				if (!player.isCorrectPassword(lobbyData.getPassword())) {
 					//session.getLoginPackets().sendClientPacket(3);
-					channel.write(new LoginMessage(LoginMessage.INVALID_UN_PWD));
+					channel.write(new LoginResponse(LoginResponse.INVALID_UN_PWD));
 					return;
 				}
 			}// || player.getBanned() > Utils.currentTimeMillis()
 			if (player.isPermBanned()) {
 				//session.getLoginPackets().sendClientPacket(4);//Account disabled
-				channel.write(new LoginMessage(LoginMessage.ACCOUNT_DISABLED));
+				channel.write(new LoginResponse(LoginResponse.ACCOUNT_DISABLED));
 				return;
 			}//24 = account does not exist
 			player.lobbyInit(context.channel(), username);
